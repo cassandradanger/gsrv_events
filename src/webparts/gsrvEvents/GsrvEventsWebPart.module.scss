@@ -6,6 +6,8 @@ body{
   padding: 0;
   width: 350px;
   border: 1px solid black;
+  height: 310px;
+  overflow: auto;
 }
 .titleEV{
   color: black;
@@ -42,6 +44,9 @@ body{
   padding: 0;
 }
 .subEventEV{
-  margin: 0 0 0 40px;
+  margin: 0 0 0 80px;
   padding: 0;
+}
+.locationEV{
+  margin-left: 10px;
 }
