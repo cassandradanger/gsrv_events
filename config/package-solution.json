@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "gsrv-events-client-side-solution",
+    "id": "1c852f72-897c-4467-82bc-be6ea624023d",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/gsrv-events.sppkg"
+  }
+}
