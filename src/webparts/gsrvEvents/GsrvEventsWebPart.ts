@@ -68,7 +68,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
 
         let dayName = (date.toString()).slice(0,3);
         let monthName = (date.toString()).slice(4,7);
-        let dayNum = (date.toString()).slice(8, 9);
+        let dayNum = (date.toString()).slice(8, 10);
         let year = (date.toString()).slice(10,15);
 
         let startTime = (date.toString()).slice(16, 24);
