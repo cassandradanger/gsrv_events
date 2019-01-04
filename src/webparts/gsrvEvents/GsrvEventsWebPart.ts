@@ -145,6 +145,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
             <p class=${styles.dateHeaderEV}>${dayName}, ${monthName} ${dayNum}, ${year} <a href=#>>></a></p>
             <p class=${styles.eventEV}>${standardStartTime} ${item.Title}</p>
             <p class=${styles.subEventEV}>${displayHour} ${displayMinute} ${displayTime} <span class=${styles.locationEV}>${location}</span></p>
+            <div class=${styles.verticalBar}></div>
           </li>
           `;  
       });  
