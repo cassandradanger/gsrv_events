@@ -35,12 +35,9 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
   public render(): void {
     this.domElement.innerHTML = `
     <div class=${styles.mainEV}>
-      <p class=${styles.titleEV}>
-        Upcoming Deadlines and Team Calendar
-      </p>
-      <ul class=${styles.contentEV}>
+    <ul class=${styles.contentEV}>
         <div id="spListContainer" /></div>
-      </ul>
+        </ul>
     </div>`;
       this._firstGetList();
   }
@@ -59,6 +56,12 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
 
     private _renderList(items: ISPList[]): void {
       let html: string = ``;
+
+      html += `
+      <p class=${styles.titleEV}>
+        Upcoming Deadlines and Team Calendar
+      </p>
+      `
       
       items.forEach((item: ISPList) => {
         let date = new Date(item.EventDate);
@@ -149,8 +152,15 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
           </li>
           `;  
       });  
-      const listContainer: Element = this.domElement.querySelector('#spListContainer');  
-      listContainer.innerHTML = html;  
+
+      var secondHtml = `<p class=${styles.gsrv_logo}></p>`
+      if(items.length === 0){
+        const listContainer: Element = this.domElement.querySelector('#spListContainer');  
+        listContainer.innerHTML = secondHtml;  
+      } else {
+        const listContainer: Element = this.domElement.querySelector('#spListContainer');  
+        listContainer.innerHTML = html;  
+      }
     } 
   
   protected get dataVersion(): Version {
