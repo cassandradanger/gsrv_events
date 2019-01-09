@@ -56,9 +56,6 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     // SharePoint PnP Rest Call to get the User Profile Properties
     return sp.profiles.myProperties.get().then(function(result) {
       var props = result.UserProfileProperties;
-      var propValue = "";
-      var userDepartment = "";
-  
       props.forEach(function(prop) {
         //this call returns key/value pairs so we need to look for the Dept Key
         if(prop.Key == "Department"){
@@ -84,11 +81,10 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
    private _renderList(items: ISPList[]): void {
     let html: string = ``;
       html += `
-    <p class=${styles.titleEV}>
-      Upcoming Deadlines and Team Calendar
-    </p>
-    `
-  
+        <h3 class=${styles.titleEV}>
+          Upcoming Deadlines and Team Calendar
+        </h3>
+        `
     var siteURL = "";
     var eventsListName =  "";
     var date = new Date();
@@ -98,17 +94,12 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     var yyyy = date.getFullYear();
     if(dd < 10){
       dd = 0 + dd;
-      console.log(dd);
     }
-
     if(mm < 10){
       mm = 0 + mm;
-      console.log(mm);
     }
-
     strToday = mm + "/" + dd + "/" + yyyy;
-    console.log(strToday);
-    
+
     items.forEach((item: ISPList) => {
       siteURL = item.DeptURL;
       eventsListName = item.CalURL;
