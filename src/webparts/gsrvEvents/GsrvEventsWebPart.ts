@@ -109,15 +109,14 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     
     // then use PnP to query the list
     // CASIE IF YOU NEED MORE THAN 5 EVENTS JUST UPDATE THE NUMBER BELOW
-    w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(5)
+    w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(5).orderBy("EventDate")
     .get()
     .then((data) => {
-      console.log(data);
       data.forEach((data) => {
         let date = new Date(data.EventDate);
         let endDate = new Date(data.EndDate);
         let testing = moment(endDate,"DD/MM/YYYY HH:mm:ss").diff(moment(date,"DD/MM/YYYY HH:mm:ss"));
-        let endTime = moment.duration(testing);
+        let endTime = moment.duration(testing).asMinutes();
 
         let dayName = (date.toString()).slice(0,3);
         let monthName = (date.toString()).slice(4,7);
@@ -129,35 +128,55 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
         let standardStartTime = moment(startTime, 'HH:mm').format('hh:mm a');
         let location = data.Location;
 
-        let displayHour = endTime.hours().toString();
-        let displayMinute = endTime.minutes().toString();
-        let displayTime = '';
+        let displayTime = '0';
+        let displayType = '';
+
+        if(endTime === 60){
+          displayTime = '1';
+          displayType = 'hour'
+        } else if (endTime >= 60 && endTime <= 1440){
+          let tempTime = Math.ceil(endTime/60);
+          displayTime = tempTime.toString();
+          displayType = 'hours';
+        } else if (endTime > 1440){
+          let tempTime = Math.ceil(endTime / 1440);
+          displayTime = tempTime.toString();
+          displayType = 'days'
+        }
+        else if (endTime < 60){
+          displayTime = endTime.toString();
+          displayType = endTime > 1 ? 'minutes' : 'minute';
+        }
+
+
+
+
 
         if(location === null){
           location = "Location TBD";
         }
-        if(displayHour === '0'){
-          displayHour = '';
-        }
-        if(displayMinute === '0'){
-          displayMinute = '';
-        }
-        if(dayNum !== endDayNum){
-          displayMinute = '';
-          displayHour = '';
-        }
+        // if(displayHour === '0'){
+        //   displayHour = '';
+        // }
+        // if(displayMinute === '0'){
+        //   displayMinute = '';
+        // }
+        // if(dayNum !== endDayNum){
+        //   displayMinute = '';
+        //   displayHour = '';
+        // }
 
-        if(dayNum !== endDayNum){
-          displayTime = 'All Day'
-        } else if(endTime.hours() === 1){
-          displayTime = 'hour'
-        } else if (endTime.hours() > 1){
-          displayTime = 'hours'
-        } else if (endTime.minutes() > 0){
-          displayTime  = 'minutes'
-        } else if(endTime.hours() === 0 && endTime.minutes() === 0){
-          displayTime = 'All Day'
-        }
+        // if(dayNum !== endDayNum){
+        //   displayType = 'All Day'
+        // } else if(endTime.hours() === 1){
+        //   displayType = 'hour'
+        // } else if (endTime.hours() > 1){
+        //   displayType = 'hours'
+        // } else if (endTime.minutes() > 0){
+        //   displayType  = 'minutes'
+        // } else if(endTime.hours() === 0 && endTime.minutes() === 0){
+        //   displayType = 'All Day'
+        // }
 
         if(dayName === 'Mon'){
           dayName = 'Monday';
@@ -206,7 +225,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
               <a href="https://girlscoutsrv.sharepoint.com${siteURL}/Lists/${eventsListName}/DispForm.aspx?ID=${data.Id}">>></a>
             </p>
             <p class=${styles.eventEV}>${standardStartTime} ${data.Title}</p>
-            <p class=${styles.subEventEV}>${displayHour} ${displayMinute} ${displayTime} <span class=${styles.locationEV}>${location}</span></p>
+            <p class=${styles.subEventEV}>${displayTime} ${displayType} <span class=${styles.locationEV}>${location}</span></p>
             <div class=${styles.verticalBar}></div>
           </li>
           `;  
