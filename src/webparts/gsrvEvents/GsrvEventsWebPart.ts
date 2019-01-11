@@ -109,7 +109,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     
     // then use PnP to query the list
     // CASIE IF YOU NEED MORE THAN 5 EVENTS JUST UPDATE THE NUMBER BELOW
-    w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(5).orderBy("EventDate")
+    w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(3).orderBy("EventDate")
     .get()
     .then((data) => {
       data.forEach((data) => {
@@ -148,35 +148,9 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
           displayType = endTime > 1 ? 'minutes' : 'minute';
         }
 
-
-
-
-
         if(location === null){
           location = "Location TBD";
         }
-        // if(displayHour === '0'){
-        //   displayHour = '';
-        // }
-        // if(displayMinute === '0'){
-        //   displayMinute = '';
-        // }
-        // if(dayNum !== endDayNum){
-        //   displayMinute = '';
-        //   displayHour = '';
-        // }
-
-        // if(dayNum !== endDayNum){
-        //   displayType = 'All Day'
-        // } else if(endTime.hours() === 1){
-        //   displayType = 'hour'
-        // } else if (endTime.hours() > 1){
-        //   displayType = 'hours'
-        // } else if (endTime.minutes() > 0){
-        //   displayType  = 'minutes'
-        // } else if(endTime.hours() === 0 && endTime.minutes() === 0){
-        //   displayType = 'All Day'
-        // }
 
         if(dayName === 'Mon'){
           dayName = 'Monday';
