@@ -82,7 +82,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     let html: string = ``;
       html += `
         <h3 class=${styles.titleEV}>
-          Upcoming Deadlines and Team Calendar
+          <a href="https://girlscoutsrv.sharepoint.com/${userDept}/Team%20Events">Upcoming Deadlines and Team Calendar</a>
         </h3>
         `
     var siteURL = "";
