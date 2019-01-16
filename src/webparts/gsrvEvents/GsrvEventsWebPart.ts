@@ -112,17 +112,22 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(3).orderBy("EventDate")
     .get()
     .then((data) => {
+      console.log(data);
       data.forEach((data) => {
-        let date = new Date(data.EventDate);
-        let endDate = new Date(data.EndDate);
-        let testing = moment(endDate,"DD/MM/YYYY HH:mm:ss").diff(moment(date,"DD/MM/YYYY HH:mm:ss"));
-        let endTime = moment.duration(testing).asMinutes();
+        let date = new Date(data.EventDate).toUTCString();
+        let endDate = new Date(data.EndDate).toUTCString();
+        let date1 = new Date(data.EventDate);
+        let endDate1 = new Date(data.EndDate)
+        let duration = moment(endDate1,"DD/MM/YYYY HH:mm:ss").diff(moment(date1,"DD/MM/YYYY HH:mm:ss"));
+        let endTime = moment.duration(duration).asMinutes();
 
         let dayName = (date.toString()).slice(0,3);
-        let monthName = (date.toString()).slice(4,7);
+        let monthName = (date.toString()).slice(8,12);
+        console.log("'",monthName,"'");
         let dayNum = (date.toString()).slice(8, 10);
         let endDayNum = (endDate.toString()).slice(8, 10);
-        let year = (date.toString()).slice(10,15);
+        let year = (date.toString()).slice(12,16);
+        console.log(year);
 
         let startTime = (date.toString()).slice(16, 24);
         let standardStartTime = moment(startTime, 'HH:mm').format('hh:mm a');
