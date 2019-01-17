@@ -82,7 +82,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     let html: string = ``;
       html += `
         <h3 class=${styles.titleEV}>
-          <a href="https://girlscoutsrv.sharepoint.com/${userDept}/Team%20Events">Upcoming Deadlines and Team Calendar</a>
+          <a href="https://girlscoutsrv.sharepoint.com${items[0].DeptURL}/Lists/Team%20Events">Upcoming Deadlines and Team Calendar</a>
         </h3>
         `
     var siteURL = "";
@@ -112,22 +112,38 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
     w.lists.getByTitle(eventsListName).items.filter("EventDate ge '" + strToday + "'").top(3).orderBy("EventDate")
     .get()
     .then((data) => {
-      console.log(data);
-      data.forEach((data) => {
-        let date = new Date(data.EventDate).toUTCString();
-        let endDate = new Date(data.EndDate).toUTCString();
-        let date1 = new Date(data.EventDate);
-        let endDate1 = new Date(data.EndDate)
-        let duration = moment(endDate1,"DD/MM/YYYY HH:mm:ss").diff(moment(date1,"DD/MM/YYYY HH:mm:ss"));
-        let endTime = moment.duration(duration).asMinutes();
+      let date: any;
+      let endDate: any;
+      let dayName = '';
+      let monthName = '';
+      let dayNum = '';
+      let year = '';
+      let duration: any;
+      let endTime: any;
 
-        let dayName = (date.toString()).slice(0,3);
-        let monthName = (date.toString()).slice(8,12);
-        console.log("'",monthName,"'");
-        let dayNum = (date.toString()).slice(8, 10);
-        let endDayNum = (endDate.toString()).slice(8, 10);
-        let year = (date.toString()).slice(12,16);
-        console.log(year);
+      data.forEach((data) => {
+        if(data.fAllDayEvent){
+          date = new Date(data.EventDate).toUTCString();
+          console.log(date);
+          endDate = new Date(data.EndDate).toUTCString();
+          dayName = (date.toString()).slice(0,3);
+          monthName = (date.toString()).slice(8,11);
+          dayNum = (date.toString()).slice(4,7);
+          year = (date.toString()).slice(12,16);
+        }else {
+        date = new Date(data.EventDate);
+        endDate = new Date(data.EndDate);
+        
+
+        console.log(date);
+        duration = moment(endDate,"DD/MM/YYYY HH:mm:ss").diff(moment(date,"DD/MM/YYYY HH:mm:ss"));
+        endTime = moment.duration(duration).asMinutes();
+
+        dayName = (date.toString()).slice(0,3);
+        monthName = (date.toString()).slice(4,7);
+        dayNum = (date.toString()).slice(8,10);
+        year = (date.toString()).slice(11,15);
+        }
 
         let startTime = (date.toString()).slice(16, 24);
         let standardStartTime = moment(startTime, 'HH:mm').format('hh:mm a');
@@ -136,7 +152,10 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
         let displayTime = '0';
         let displayType = '';
 
-        if(endTime === 60){
+        if(data.fAllDayEvent){
+          displayTime = 'All Day';
+          displayType = ''
+        } else if(endTime === 60){
           displayTime = '1';
           displayType = 'hour'
         } else if (endTime >= 60 && endTime <= 1440){
@@ -218,6 +237,7 @@ export default class GsrvEventsWebPart extends BaseClientSideWebPart<IGsrvEvents
         listContainer.innerHTML = html;  
       }
     }).catch(e => { console.error(e); });
+    
   }
 
     // this is required to use the SharePoint PnP shorthand REST CALLS
